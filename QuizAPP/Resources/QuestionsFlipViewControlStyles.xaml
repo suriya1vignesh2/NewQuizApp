@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:QuizAPP.Control"
+                    xmlns:helper="clr-namespace:QuizAPP.Helper"
+                    xmlns:view="clr-namespace:QuizAPP.View"
+                    xmlns:local="clr-namespace:QuizAPP.Resources">
+
+    <DataTemplate x:Key="SingleAnswerTemplate">
+        <ListBox ItemsSource="{Binding Question.Options,UpdateSourceTrigger =PropertyChanged}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{Binding OptionNumber,UpdateSourceTrigger=PropertyChanged}"></Label>
+                        <RadioButton GroupName="Radio1" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" Content="{Binding AnswerContent,UpdateSourceTrigger=PropertyChanged}" ></RadioButton>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EssaytypeTemplate">
+        <TextBox TextWrapping="WrapWithOverflow" Text="{Binding Question.Answer,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MultipleAnswerTemplate">
+        <ListBox ItemsSource="{Binding Question.Options,UpdateSourceTrigger =PropertyChanged}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding OptionNumber,UpdateSourceTrigger=PropertyChanged}"></Label>
+                        <CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" Content="{Binding AnswerContent,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DataTemplate>
+
+    <helper:QuizFlipViewTemplateSelector x:Key="templateselector"
+                                         MultipleAnswersTemplate="{StaticResource MultipleAnswerTemplate}"
+                                         SingleAnswerTemplate="{StaticResource SingleAnswerTemplate}"
+                                         EssayTemplate="{StaticResource EssaytypeTemplate}" >
+
+    </helper:QuizFlipViewTemplateSelector>
+
+    <Style TargetType="{x:Type Controls:QuestionsFlipViewControl}">
+       
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:QuestionsFlipViewControl}">
+                    <Grid>
+                        
+                        <ContentControl x:Name="MainContent" 
+                                        Content="{Binding Path=SelectedItem,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Controls:QuestionsFlipViewControl}}}"
+                                        ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource TemplatedParent}}" 
+                                        
+                                        >
+                            
+                        </ContentControl>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid  x:Name="MainGrid"    >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"></RowDefinition>
+                            <RowDefinition Height="7*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel   Orientation="Horizontal">
+                            <Label Content="{Binding DataContext.SelectedQutionNumber ,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type view:TestView}}}"></Label>
+                            <Label Margin="10,0,0,0" Content="{Binding Question.QuestionContent,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"></Label>
+                        </StackPanel>
+                        <ContentControl Grid.Row="1" x:Name="ItemsContent" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" 
+                                        Content="{Binding .,UpdateSourceTrigger=PropertyChanged}" ContentTemplateSelector="{StaticResource templateselector}"
+          ></ContentControl> 
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+    
+</ResourceDictionary>

@@ -1,0 +1,18 @@
+﻿<Window x:Class="QuizAPP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuizAPP"
+        xmlns:view="clr-namespace:QuizAPP.View"
+        mc:Ignorable="d"
+        x:Name="FirstWindow"
+        xmlns:Controls ="clr-namespace:QuizAPP.Control"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+
+        <view:LoginPage Visibility="{Binding ElementName=FirstWindow,  Path =DataContext.LoginWindowVisibility,UpdateSourceTrigger=PropertyChanged }" DataContext="{Binding LoginViewModel}" x:Name="Login"   ></view:LoginPage>
+        <view:TestView Visibility="{Binding ElementName=FirstWindow,  Path =DataContext.TestWindowVisibility,UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding TestViewModel}" x:Name="Tester"   ></view:TestView>
+        <view:ResultView Visibility="{Binding ElementName=FirstWindow,  Path =DataContext.ResultWindowVisibility,UpdateSourceTrigger=PropertyChanged}"  DataContext="{Binding ResultViewModel}"></view:ResultView>
+    </Grid>
+</Window>
